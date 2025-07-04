@@ -1,13 +1,13 @@
 # ECR repositories (dynamic, using for_each)
 module "ecr" {
-  source   = "../module/ecr"
+  source   = "../tf-modules/ecr"
   for_each = var.ecr_repositories
   name     = each.value.name
   # tags removed: not supported by module
 }
 # Main VPC for the environment
 module "vpc_main" {
-  source          = "../module/vpc"
+  source          = "../tf-modules/vpc"
   name            = var.project
   cidr_block      = var.vpc_cidr_block
   public_subnets  = var.public_subnets
@@ -18,7 +18,7 @@ module "vpc_main" {
 
 # ECS Cluster for the environment
 module "ecs_cluster" {
-  source      = "../module/ecs_cluster"
+  source      = "../tf-modules/ecs_cluster"
   name        = var.ecs_cluster_name
   environment = var.environment
   project     = var.project
@@ -27,7 +27,7 @@ module "ecs_cluster" {
 
 # ECS Task Definition for the application
 module "ecs_task" {
-  source          = "../module/ecs_task_definition"
+  source          = "../tf-modules/ecs_task_definition"
   family          = var.ecs_task_family
   container_name  = var.container_name
   image           = var.container_image
@@ -36,7 +36,7 @@ module "ecs_task" {
 
 # ECS Fargate Service for the application
 module "ecs_service" {
-  source               = "../module/ecs_fargate_service"
+  source               = "../tf-modules/ecs_fargate_service"
   name                 = var.ecs_service_name
   cluster_id           = module.ecs_cluster.ecs_cluster_id
   task_definition      = module.ecs_task.task_definition_arn

@@ -14,14 +14,14 @@ This directory contains reusable Terraform modules for deploying AWS infrastruct
 
 ```hcl
 module "ecr" {
-  source   = "../module/ecr"
+  source   = "../tf-modules/ecr"
   for_each = var.ecr_repositories
   name     = each.value.name
   tags     = each.value.tags
 }
 
 module "vpc_main" {
-  source          = "../module/vpc"
+  source          = "../tf-modules/vpc"
   name            = var.project
   cidr_block      = var.vpc_cidr_block
   public_subnets  = var.public_subnets
@@ -51,7 +51,7 @@ terraform/
   variables.tf
   staging.tfvars
   prod.tfvars
-module/
+tf-modules/
   ecr/
   vpc/
   ecs_cluster/
